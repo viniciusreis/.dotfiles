@@ -1,2 +1,9 @@
-vim.wo.number = true
-vim.wo.relativenumber = true
+require("vinicius.plugins-setup")
+require("vinicius.core.options")
+require("vinicius.core.colorscheme")
+require("vinicius.core.keymaps")
+require("vinicius.plugins.comment")
+require("vinicius.plugins.nvim-tree")
+require("vinicius.plugins.lualine")
+require("vinicius.plugins.telescope")
+require("vinicius.plugins.nvim-cmp")
