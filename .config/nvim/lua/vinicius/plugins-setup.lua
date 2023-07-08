@@ -67,6 +67,17 @@ use("L3MON4D3/LuaSnip")
 use("saadparwaiz1/cmp_luasnip")
 use("rafamadriz/friendly-snippets")
 
+-- managing & installing lsp servers
+use("williamboman/mason.nvim")
+use("williamboman/mason-lspconfig.nvim")
+
+-- configuring lsp servers
+use("neovim/nvim-lspconfig")
+use("hrsh7th/cmp-nvim-lsp") -- display lsp entries in autocompletion
+use({"glepnir/lspsaga.nvim", branch = "main"}) -- enhance ui for lsp
+use("jose-elias-alvarez/typescript.nvim") -- feature like renaming file and updating imports
+use("onsails/lspkind.nvim") -- icons to autocompletion window
+
   if packer_bootstrap then
     require("packer").sync()
   end
