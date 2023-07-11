@@ -40,7 +40,7 @@ return packer.startup(function(use)
   -- essential plugins
   use("tpope/vim-surround")
   use("vim-scripts/ReplaceWithRegister")
-  
+
   -- commenting with gc
   use("numToStr/Comment.nvim")
 
@@ -77,6 +77,19 @@ use("hrsh7th/cmp-nvim-lsp") -- display lsp entries in autocompletion
 use({"glepnir/lspsaga.nvim", branch = "main"}) -- enhance ui for lsp
 use("jose-elias-alvarez/typescript.nvim") -- feature like renaming file and updating imports
 use("onsails/lspkind.nvim") -- icons to autocompletion window
+
+  -- treesitter configuration
+  use({
+    "nvim-treesitter/nvim-treesitter",
+    run = function()
+      local ts_update = require("nvim-treesitter.install").update({ with_sync = true })
+      ts_update()
+    end,
+  })
+
+  -- auto closing
+  use("windwp/nvim-autopairs") -- autoclose parens, brackets, quotes, etc...
+  use({ "windwp/nvim-ts-autotag", after = "nvim-treesitter" }) -- autoclose tags
 
   if packer_bootstrap then
     require("packer").sync()
