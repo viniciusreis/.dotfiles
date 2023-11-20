@@ -30,6 +30,7 @@ return packer.startup(function(use)
 
   -- preferred colorscheme
   use({ "bluz71/vim-nightfly-colors", as = 'nightfly' })
+
   -- fuzzy finding
   use({"nvim-telescope/telescope-fzf-native.nvim", run = "make"})
   use({"nvim-telescope/telescope.nvim",
@@ -37,14 +38,14 @@ return packer.startup(function(use)
        requires = {{'nvim-lua/plenary.nvim'}}})
 
   -- treesitter configuration
-  use({ "nvim-treesitter/nvim-treesitter", {run = ':TSUpdate'}})
+  use("nvim-treesitter/nvim-treesitter", {run = ':TSUpdate'})
   use({"nvim-treesitter/playground"})
 
   use({"mbbill/undotree"})
   use({"tpope/vim-fugitive"})
 
   -- tmux & split window navigation
-  use("christoomey/vim-tmux-navigator") 
+  use("christoomey/vim-tmux-navigator")
   use("szw/vim-maximizer") -- maximizes and restores current window
 
   -- essential plugins
@@ -54,7 +55,7 @@ return packer.startup(function(use)
   -- managing & installing lsp servers
   use("williamboman/mason.nvim")
   use("williamboman/mason-lspconfig.nvim")
-  
+
   -- configuring lsp servers
   use("neovim/nvim-lspconfig")
   use("hrsh7th/cmp-nvim-lsp") -- display lsp entries in autocompletion
@@ -66,7 +67,9 @@ return packer.startup(function(use)
   use("hrsh7th/nvim-cmp")
   use("hrsh7th/cmp-buffer")
   use("hrsh7th/cmp-path")
-  
+  use('hrsh7th/nvim-cmp')
+  use('hrsh7th/cmp-nvim-lsp')
+
   -- snippets
   use ('mattn/emmet-vim')
   use("L3MON4D3/LuaSnip")
@@ -76,8 +79,8 @@ return packer.startup(function(use)
   -- commenting with gc
   use("numToStr/Comment.nvim")
 
-  -- file explorer
-  use("nvim-tree/nvim-tree.lua")
+--   -- file explorer
+--   use("nvim-tree/nvim-tree.lua")
 
  -- icons
  use("kyazdani42/nvim-web-devicons")
