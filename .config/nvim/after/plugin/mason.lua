@@ -13,7 +13,7 @@ require('mason-lspconfig').setup({
 
   ensure_installed = {
     "arduino_language_server",
-    -- "asm_lsp",
+    "asm_lsp",
     "neocmake",
     "clangd",
     "cssls",
@@ -25,6 +25,7 @@ require('mason-lspconfig').setup({
     "jsonls",
     "marksman",
     "prismals",
+    -- "prettier",
     -- "pylsp",
     "lua_ls",
     "tailwindcss",
