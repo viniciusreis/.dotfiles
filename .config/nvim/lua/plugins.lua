@@ -26,7 +26,7 @@ end
 
 return packer.startup(function(use)
 
-  use({"wbthomason/packer.nvim"})
+  use("wbthomason/packer.nvim")
 
   -- preferred colorscheme
   use({ "bluz71/vim-nightfly-colors", as = 'nightfly' })
@@ -39,10 +39,10 @@ return packer.startup(function(use)
 
   -- treesitter configuration
   use("nvim-treesitter/nvim-treesitter", {run = ':TSUpdate'})
-  use({"nvim-treesitter/playground"})
+  use("nvim-treesitter/playground")
 
-  use({"mbbill/undotree"})
-  use({"tpope/vim-fugitive"})
+  use("mbbill/undotree")
+  use("tpope/vim-fugitive")
 
   -- tmux & split window navigation
   use("christoomey/vim-tmux-navigator")
@@ -58,7 +58,6 @@ return packer.startup(function(use)
 
   -- configuring lsp servers
   use("neovim/nvim-lspconfig")
-  use("hrsh7th/cmp-nvim-lsp") -- display lsp entries in autocompletion
   use({"glepnir/lspsaga.nvim", branch = "main"}) -- enhance ui for lsp
   use("jose-elias-alvarez/typescript.nvim") -- feature like renaming file and updating imports
   use("onsails/lspkind.nvim") -- icons to autocompletion window
@@ -67,33 +66,35 @@ return packer.startup(function(use)
   use("hrsh7th/nvim-cmp")
   use("hrsh7th/cmp-buffer")
   use("hrsh7th/cmp-path")
-  use('hrsh7th/nvim-cmp')
-  use('hrsh7th/cmp-nvim-lsp')
+  use("hrsh7th/cmp-nvim-lsp") -- display lsp entries in autocompletion
 
   -- snippets
-  use ('mattn/emmet-vim')
+  use("mattn/emmet-vim")
   use("L3MON4D3/LuaSnip")
   use("saadparwaiz1/cmp_luasnip")
   use("rafamadriz/friendly-snippets")
+  use("joeveiga/ng.nvim")
 
   -- commenting with gc
   use("numToStr/Comment.nvim")
 
---   -- file explorer
---   use("nvim-tree/nvim-tree.lua")
+  ---- file explorer
+  --use("nvim-tree/nvim-tree.lua")
 
- -- icons
- use("kyazdani42/nvim-web-devicons")
+  -- icons
+  use("kyazdani42/nvim-web-devicons")
 
- -- statusline
- use("nvim-lualine/lualine.nvim")
+  -- statusline
+  use("nvim-lualine/lualine.nvim")
 
   -- auto closing
   use("windwp/nvim-autopairs") -- autoclose parens, brackets, quotes, etc...
   use({ "windwp/nvim-ts-autotag", after = "nvim-treesitter" }) -- autoclose tags
 
- if packer_bootstrap then
-   require('packer').sync()
- end
+  use("dmmulroy/tsc.nvim")
+
+  if packer_bootstrap then
+    require('packer').sync()
+  end
 
 end)
