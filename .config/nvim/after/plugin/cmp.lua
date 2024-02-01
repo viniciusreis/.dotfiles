@@ -24,6 +24,7 @@ cmp.setup({
   }),
   -- sources for autocompletion
   sources = cmp.config.sources({
+    { name = "clangd" }, -- lsp
     { name = "nvim_lsp" }, -- lsp
     { name = "luasnip" }, -- snippets
     { name = "buffer" }, -- text within current buffer
@@ -31,7 +32,7 @@ cmp.setup({
   }),
   formatting = {
     format = lspkind.cmp_format({
-      maxwidth = 50,
+      maxwidth = 80,
       ellipsis_char = "...",
     }),
   },
