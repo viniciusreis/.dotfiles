@@ -1,1 +1,1 @@
-print 'fresh configuration'
+require 'vcr.options'
