@@ -1,8 +1,11 @@
-function Colorify(color)
-  color = color or 'nightfly'
-  vim.cmd.colorscheme(color)
-  vim.api.nvim_set_hl(0, "Normal", { bg = none })
-  vim.api.nvim_set_hl(0, "NormalFloat", { bg = none })
+local colorscheme = "tokyonight-night"
+local vim = vim
+
+local status_ok, _ = pcall(vim.cmd, "colorscheme " .. colorscheme)
+if not status_ok then
+  vim.notify("colorscheme " .. colorscheme .. " not found!")
+  return
 end
 
-Colorify()
+vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
+vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
