@@ -1,56 +1,110 @@
-local base_on_attach = function(client, bufnr)
-  
-  local opts = { noremap = true, silent = true, buffer = bufnr }
+local basic_on_attach = function(event)
+  local map = function(keys, func, desc)
+    vim.keymap.set('n', keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
+  end
+  map('gd', require('telescope.builtin').lsp_definitions, '[g]oto [d]efinition')
+  map('gD', vim.lsp.buf.declaration, '[g]oto [D]eclaration')
+  map('gr', require('telescope.builtin').lsp_references, '[g]oto [r]eferences')
+  map('gI', require('telescope.builtin').lsp_implementations, '[g]oto [I]mplementation')
+  map('<leader>D', require('telescope.builtin').lsp_type_definitions, 'Type [D]efinition')
+  map('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[d]ocument [s]ymbols')
+  map('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[w]orkspace [s]ymbols')
+  map('<leader>rn', vim.lsp.buf.rename, '[r]e[n]ame')
+  map('<leader>ca', vim.lsp.buf.code_action, '[c]ode [a]ction')
+  map('K', vim.lsp.buf.hover, 'Hover Documentation') --  See `:help K` for why this keymap.
 
-  local keymap = vim.keymap
-  keymap.set('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>', opts)
-  keymap.set('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<cr>', opts)
-  keymap.set('n', 'gD', '<Cmd>lua vim.lsp.buf.declaration()<CR>', opts)                   -- got to declaration
-  keymap.set('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>', opts)
-  keymap.set('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<cr>', opts)
-  keymap.set('n', 'go', '<cmd>lua vim.lsp.buf.type_definition()<cr>', opts)
-  keymap.set('n', 'gr', '<cmd>lua vim.lsp.buf.references()<cr>', opts)
-  keymap.set('n', 'gs', '<cmd>lua vim.lsp.buf.signature_help()<cr>', opts)
-  keymap.set('n', '<F2>', '<cmd>lua vim.lsp.buf.rename()<cr>', opts)
-  keymap.set({'n', 'x'}, '<F3>', '<cmd>lua vim.lsp.buf.format({async = true})<cr>', opts)
-  keymap.set('n', 'gl', '<cmd>lua vim.diagnostic.open_float()<cr>', opts)
-  keymap.set('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<cr>', opts)
-  keymap.set('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<cr>', opts)
-  keymap.set('n', '<leader>o', '<cmd>LSoutlineToggle<CR>', opts)                          -- see outline on right hand side
+  local client = vim.lsp.get_client_by_id(event.data.client_id)
+  if client and client.server_capabilities.documentHighlightProvider then
+    vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
+      buffer = event.buf,
+      callback = vim.lsp.buf.document_highlight,
+    })
 
-
-  -- keymap.set('n', 'K', '<cmd>Lspsaga hover_doc<CR>', opts)                                -- show documentation for what is under cursor
-  -- keymap.set('n', 'gf', '<cmd>Lspsaga lsp_finder<CR>', opts)                              -- show definition, references
-  -- keymap.set('n', 'gd', '<cmd>Lspsaga peek_definition<CR>', opts)                         -- see definition and make edits in window
-  -- keymap.set('n', '<leader>rn', '<cmd>Lspsaga rename<CR>', opts)                          -- smart rename
-  -- keymap.set('n', '<F4>', '<cmd>Lspsaga code_action<CR>', opts)                           -- see available code actions
-  --keymap.set('n', '<F4>', '<cmd>lua vim.lsp.buf.code_action()<cr>', opts)
-  --keymap.set('n', '<leader>D', '<cmd>Lspsaga show_line_diagnostics<CR>', opts)            -- show  diagnostics for line
-  --keymap.set('n', '<leader>d', '<cmd>Lspsaga show_cursor_diagnostics<CR>', opts)          -- show diagnostics for cursor
-  --keymap.set('n', '[d', '<cmd>Lspsaga diagnostic_jump_prev<CR>', opts)                    -- jump to previous diagnostic in buffer
-  --keymap.set('n', ']d', '<cmd>Lspsaga diagnostic_jump_next<CR>', opts)                    -- jump to next diagnostic in buffer
-
-  -- typescript specific keymaps (e.g. rename file and update imports)
-  -- if client.name == 'tsserver' then
-  --   keymap.set('n', '<leader>rf', ':TypescriptRenameFile<CR>')                         -- rename file and update imports
-  --   keymap.set('n', '<leader>oi', ':TypescriptOrganizeImports<CR>')                    -- organize imports (not in youtube nvim video)
-  --   keymap.set('n', '<leader>ru', ':TypescriptRemoveUnused<CR>')                       -- remove unused variables (not in youtube nvim video)
+    vim.api.nvim_create_autocmd({ 'CursorMoved', 'CursorMovedI' }, {
+      buffer = event.buf,
+      callback = vim.lsp.buf.clear_references,
+    })
+  end
+  -- if event.data.client_id == 'clangd' then
+  --   map('<F4>', '<cmd>ClangdSwitchSourceHeader<cr>', 'Switch between header and source files');
   -- end
 end
 
 local clangd_on_attach = function(client, bufnr)
-  local keymap = vim.keymap
-  keymap.set('n', '<F4>', '<cmd>ClangdSwitchSourceHeader<cr>', opts)                       -- show documentation for what is under cursor
-  base_on_attach(client, bufnr)
+  local opts = { noremap = true, silent = true, buffer = bufnr }
+  vim.keymap.set('n', '<F4>', '<cmd>ClangdSwitchSourceHeader<cr>', opts)                       -- show documentation for what is under cursor
 end
-
 
 return {
   'neovim/nvim-lspconfig',
+  dependencies = {
+      'hrsh7th/nvim-cmp',
+      'hrsh7th/cmp-nvim-lsp',
+      'williamboman/mason.nvim',
+      'williamboman/mason-lspconfig.nvim',
+      'WhoIsSethDaniel/mason-tool-installer.nvim',
+      -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
+      { 'j-hui/fidget.nvim', opts = {} },
+      { 'folke/neodev.nvim', opts = {} },
+  },
   config = function()
-    local lspconfig = require('lspconfig')
+    vim.api.nvim_create_autocmd('LspAttach', {
+        group = vim.api.nvim_create_augroup('kickstart-lsp-attach', { clear = true }),
+        callback = basic_on_attach
+    })
 
-    lspconfig['clangd'].setup({
+    local capabilities = vim.lsp.protocol.make_client_capabilities()
+    capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities())
+
+    local servers = {
+      neocmake = {},
+      bashls = {},
+      arduino_language_server = {},
+      asm_lsp = {},
+      cssls = {},
+      dockerls = {},
+      docker_compose_language_service = {},
+      emmet_ls = {},
+      graphql = {},
+      html = {},
+      marksman = {},
+      tailwindcss = {},
+      terraformls = {},
+      tsserver = {},
+      clangd = {},
+      pyright = {},
+      rust_analyzer = {},
+      lua_ls = {
+        setting = {
+          Lua = {
+            completion = {
+              callSinppet = 'Replace'
+            }
+          }
+        }
+      }
+    }
+
+    require('mason').setup()
+
+    local ensure_installed = vim.tbl_keys(servers or {})
+    vim.list_extend(ensure_installed, {
+      'stylua',
+    })
+
+    require('mason-tool-installer').setup{ ensure_installed = ensure_installed }
+
+    require('mason-lspconfig').setup {
+      handlers = {
+        function(server_name)
+          local server = servers[server_name] or {}
+          server.capabilities = vim.tbl_deep_extend('force', capabilities, server.capabilities or {})
+          require('lspconfig')[server_name].setup(server)
+        end,
+      },
+    }
+
+    require('lspconfig')['clangd'].setup({
       on_attach = clangd_on_attach
     })
   end

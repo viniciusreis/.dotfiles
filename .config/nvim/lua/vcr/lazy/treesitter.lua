@@ -1,8 +1,7 @@
 return {
   "nvim-treesitter/nvim-treesitter",
   build = ":TSUpdate",
-  config = function () 
-    require("nvim-treesitter.configs").setup({
+  opts = {
       ensure_installed = {
         "bash",
         "json",
@@ -33,14 +32,17 @@ return {
         "regex",
         "sql",
       },
-      sync_install = false,
-      auto_install = true,
-      highlight = {
-        enable = true,
-        additional_vim_regex_highlighting = false,
-      },
-      indent = { enable = true }, -- enable indentation
-      autotag = { enable = true }, -- enable autotagging (w/ nvim-ts-autotag plugin)
-    })
-    end
+    sync_install = false,
+    auto_install = true,
+    highlight = {
+      enable = true,
+      additional_vim_regex_highlighting = false,
+    },
+    ident = { enable = true }, -- enable identation
+    autotag = { enable = true }, -- enable autotagging (w/ nvim-ts-autotag plugin)
+  },
+
+  config = function(_, opts)
+    require 'nvim-treesitter.configs'.setup(opts)
+  end
 }

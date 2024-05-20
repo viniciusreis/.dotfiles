@@ -18,6 +18,9 @@ keymap("", "<Space>", "<Nop>", opts)
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
+-- use nerdfornt
+vim.g.have_nerd_font = true
+
 -- Normal --
 -- better window navigation
 keymap("n", "<C-h>", "<C-w>h", opts)
@@ -57,6 +60,12 @@ keymap("n", "x", '"_x', opts) -- do not save deleted character to buffer
 keymap("n", "<leader>+", "<C-a>", opts) -- increment number
 keymap("n", "<leader>-", "<C-x>", opts) -- decrement number
 
+-- Diagnostic keymaps
+vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Go to previous [D]iagnostic message' })
+vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next [D]iagnostic message' })
+vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Show diagnostic [E]rror messages' })
+vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
+
 -- Insert --
 keymap('i', 'jk', '<ESC>', opts)
 
@@ -78,6 +87,10 @@ keymap("x", "K", ":move '<-2<CR>gv-gv", opts)
 keymap("x", "J", ":move '>+1<CR>gv-gv", opts)
 
 -- Terminal --
+
+-- Exit terminal mode
+vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
+
 -- better terminal navigation
 keymap("t", "<C-h>", "<C-\\><C-N><C-w>h", term_opts)
 keymap("t", "<C-j>", "<C-\\><C-N><C-w>j", term_opts)
